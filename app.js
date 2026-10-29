@@ -72,4 +72,22 @@ $("search").addEventListener("submit", async (e) => {
   }
 });
 
+function setTheme(theme) {
+  if (theme === "system") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = theme;
+  document.querySelectorAll(".themes button").forEach((b) =>
+    b.classList.toggle("active", b.dataset.theme === theme));
+  try { localStorage.setItem("theme", theme); } catch {}
+}
+
+document.querySelectorAll(".themes button").forEach((b) =>
+  b.addEventListener("click", () => setTheme(b.dataset.theme)));
+
+let savedTheme = "system";
+try { savedTheme = localStorage.getItem("theme") || "system"; } catch {}
+setTheme(savedTheme);
+
+const hour = new Date().getHours();
+$("greeting").textContent = hour < 12 ? "Good morning," : hour < 18 ? "Good afternoon," : "Good evening,";
+
 loadWeather(DEFAULT);
